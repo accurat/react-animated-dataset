@@ -1,0 +1,12 @@
+{
+  "name": "react-animated-dataset",
+  "version": "0.0.1",
+  "module": "src/index.js",
+  "repository": "https://github.com/accurat/react-animated-dataset.git",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "d3": "^5.15.0",
+    "react": "^16.12.0"
+  }
+}
