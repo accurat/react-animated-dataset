@@ -1,1 +1,260 @@
-# react-animated-dataset
+# AnimatedDataset
+
+`AnimatedDataset` uses the power of [d3](https://d3js.org) [data join](https://github.com/d3/d3-selection#joining-data) to build solid animations.
+
+Without animation you used to do something like:
+
+```jsx
+const dataset = [{ x: 10, y: 10 }, ... ]
+
+dataset.map(p => {
+  const cx = p.x
+  const cy = p.y
+
+  return <circle key={p.y} cx={cx} cy={cy} r={4} />
+})
+```
+
+This can be easly translated into this:
+
+```jsx
+import { AnimatedDataset } from 'react-animated-dataset'
+
+const dataset = [{ x: 10, y: 10 }, ... ]
+
+<AnimatedDataset
+  dataset={dataset}
+  tag="circle"
+  attrs={{
+    cx: p => p.x,
+    cy: p => p.y,
+    r: 4,
+  }}
+  keyFn={p => p.y}
+/>
+```
+
+And it comes with animations too!
+
+The component is designed to transform and animate dataset of any shape into any svg element. Animation are automatically triggered by passing a different `dataset`, a different `attrs` object or both. With `keyFn` the component is able to understand which datum has to be updated, added or removed.
+
+## Install
+
+```bash
+yarn add react-animated-dataset
+```
+
+## Usage
+
+The component creates a svg element (specified in `tag`) for each value of `dataset`. `tag` attributes are inferred from `attrs` object where _keys_ are the attribute name and _values_ can be the actual attribute value or a function that returns the value from a single dataset value (see example above).
+
+When dataset values or attrs values change, `AnimatedDataset` triggers an animation to rearrange the data. The animation is indipendent for each dataset value and there can be 3 animation states:
+
+- `enter`: datum is added
+- `update`: datum value has changed
+- `exit`: datum is removed
+
+To tell one state from an other, `AnimatedDataset` uses `keyFn`: it is a function that should return an _unique_ value for each dataset entry. These animation states can be customized with the `init` prop. `init` has same shape as `attrs` and its values are used to specify the attributes values for every datum that is `enter`ing or `exit`ing the dataset.
+
+```jsx
+const lettersDataset = randomLetters()
+
+<AnimatedDataset
+  dataset={lettersDataset}
+  tag="text"
+  init={{
+    opacity: 0,
+    y: l => (lettersDataset.includes(l) ? 0 : 80),
+  }}
+  attrs={{
+    opacity: 1,
+    x: (_, index) => index * 40,
+    y: 40,
+    text: letter => letter,
+    fill: 'black',
+    'font-size': 50,
+  }}
+  keyFn={letter => letter}
+/>
+```
+
+<p align="center">
+  <img align="middle" src="docs/randomletters.gif" width="70%" />
+</p>
+
+In the example above, `opacity: 0` and `y` function in `init` are used for every entering and exiting letters.
+
+### Use case: Linechart with d3
+
+In this next example we will draw a simple line chart, with circles for each data point and a grid with only horizontal lines. Starting from a dataset of type `Array<{x: number, y: number}>`, we can use _d3.scaleLinear_ and _d3.line_ as a utility to map data points to coordinates and to create the shape of the path.
+
+```jsx
+// Initial setup
+
+const xScale = d3
+  .scaleLinear()
+  .domain(xDomain)
+  .range([0, WIDTH])
+
+const yScale = d3
+  .scaleLinear()
+  .domain(yDomain)
+  .range([HEIGHT, 0])
+
+const lineGenerator = d3
+  .line()
+  .x(p => xScale(p.x))
+  .y(p => yScale(p.y))
+
+
+// To draw the horizontal grid we use yScale.ticks as dataset.
+// To highlight the line relative to value 0 we can check tick
+// value in 'stroke-width' and 'opacity'.
+
+<AnimatedDataset
+  dataset={yScale.ticks(10)}
+  tag="line"
+  init={{ opacity: 0 }}
+  attrs={{
+    x1: xScale.range()[0],
+    x2: xScale.range()[1],
+    y1: tick => yScale(tick),
+    y2: tick => yScale(tick),
+    stroke: 'lightgrey',
+    'stroke-width': tick => (tick === 0 ? 2 : 1),
+    opacity: tick => (tick === 0 ? 1 : 0.5),
+  }}
+  keyFn={tick => tick}
+/>
+
+
+// Next we draw the linechart using a single path. To get a single
+// path out of AnimatadDataset we need to wrap our dataset in
+// an array and set d attribute to the lineGenerator.
+
+<AnimatedDataset
+  dataset={[dataset]}
+  tag="path"
+  attrs={{
+    d: lineGenerator,
+    fill: "none",
+    stroke: "darkgrey"
+  }}
+  keyFn={(_, i) => i}
+/>
+
+
+// Finally we add circles for every data point. As for
+// grid, we use xScale and yScale to calculate the actual
+// position. We can also change fill according to y value.
+
+<AnimatedDataset
+  dataset={dataset}
+  tag="circle"
+  attrs={{
+    opacity: 1,
+    cx: p => xScale(p.x),
+    cy: p => yScale(p.y),
+    fill: p => (p.y >= 0 ? "green" : "red"),
+    r: 3
+  }}
+  keyFn={(_, i) => i}
+/>
+```
+
+<p align="center">
+  <img align="middle" src="docs/linechart_initial.jpg" width="80%" />
+</p>
+
+Whenever `dataset`, `xRange` or `yRange` change, we have smooth animations.
+
+<p align="center">
+  <img align="middle" src="docs/linechart.gif" width="80%" />
+</p>
+
+As it can be seen in the result, `AnimatedDataset` supports _path morphing_ and _color interpolation_. Also, thanks to the combination of grid `keyFn` and `init` props, the component knows which line to move and which to fade in/out.
+
+## Props
+
+<h3 id="dataset"> 
+  <a  href="#dataset">#</a> dataset
+</h3>
+
+- **Required**
+- Type: `Array<any>`
+
+<h3 id="attrs"> 
+  <a  href="#attrs">#</a> attrs
+</h3>
+
+- **Required**
+- Type: `{[key: string]: number | string | ((datum: any, index: int, dataset: Array<any>) => number | string)}`
+
+`attrs` keys should be an attribute name for given `tag`. They must be in kebab-case.
+
+`attrs` values should be the actual value or a function to calculate the value. Function accepts as parameter a single datum, its index and the entire dataset.
+
+```jsx
+<AnimatedDataset
+  attrs={{
+    stroke: 'black',
+    'stroke-width': datum => datum.someValue * 10,
+    fill: (datum, index, dataset) => ...
+  }}
+/>
+```
+
+It also accepts events listener where keys follow the signature `"on-<eventname>"` and values are functions.
+
+```jsx
+<AnimatedDataset
+  attrs = {{
+    'on-click': datum => console.log(datum),
+    'on-mouseover': (datum, index, dataset) => ...
+  }}
+/>
+```
+
+<h3 id="tag"> 
+  <a  href="#tag">#</a> tag
+</h3>
+
+- Type: `string`
+- Default: `"rect"`
+
+Any valid svg tag name.
+
+<h3 id="keyFn"> 
+  <a  href="#keyFn">#</a> keyFn
+</h3>
+
+- Type: `(datum: any, index: number, dataset: Array<any>) => any`
+- Default: `datum => datum.key`
+
+A function that identifies dataset values. It should return an unique value for each datum.
+
+<h3 id="init"> 
+  <a  href="#init">#</a> init
+</h3>
+
+- Type: `{[key: string]: number | string | ((datum: any, index: int, dataset: Array<any>) => number | string)}`
+
+Same as [attrs](#-attrs). `init` values are used to animate entering and exiting values. It doesn't support event listeners.
+
+<h3 id="disableAnimation"> 
+  <a  href="#disableAnimation">#</a> disableAnimation
+</h3>
+
+- Type: `boolean`
+- Default: `false`
+
+If `true` animation is disabled and the data is updated immediately.
+
+<h3 id="duration"> 
+  <a  href="#duration">#</a> duration
+</h3>
+
+- Type: `number`
+- Default: `1000`
+
+The animation duration in milliseconds.
