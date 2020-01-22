@@ -81,5 +81,5 @@ export function AnimatedDataset({
     }
   }, [dataset, init, keyFn, ref, tag, attrs, duration, disableAnimation])
 
-  return <g ref={ref} />
+  return React.createElement('g', { ref })
 }
