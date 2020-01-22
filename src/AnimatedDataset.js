@@ -1,12 +1,15 @@
 import React from 'react'
 import { select } from 'd3-selection'
 import 'd3-transition'
+import { mapKeys } from './mapKey'
+import { parseAttributeName, parseEventName } from './parse'
 
 export function AnimatedDataset({
   dataset,
-  attrs,
+  attrs: unparsedAttrs,
   tag = 'rect',
-  init = {},
+  init: unparsedInit = {},
+  events: unparsedEvents = {},
   keyFn = d => d.key,
   duration = 1000,
   delay = 0,
@@ -18,8 +21,12 @@ export function AnimatedDataset({
   React.useLayoutEffect(() => {
     if (!ref.current) return
 
-    const attrsList = Object.keys(attrs).filter(a => !a.startsWith('on-') && a !== 'text')
-    const attrsListListeners = Object.keys(attrs).filter(a => a.startsWith('on-'))
+    const attrs = mapKeys(unparsedAttrs, parseAttributeName)
+    const init = mapKeys(unparsedInit, parseAttributeName)
+    const events = mapKeys(unparsedEvents, parseEventName)
+
+    const attrsList = Object.keys(attrs).filter(a => a !== 'text')
+    const eventsList = Object.keys(events)
     const oldAttrs = refOldAttrs.current || {}
 
     const animate = () => {
@@ -44,9 +51,8 @@ export function AnimatedDataset({
                 })
               })
               .call(sel => {
-                attrsListListeners.forEach(a => {
-                  const eventName = a.match(/on-(.*)/)[1]
-                  sel.on(eventName, attrs[a])
+                eventsList.forEach(event => {
+                  sel.on(event, events[event])
                 })
               })
               .call(sel => {
@@ -96,7 +102,17 @@ export function AnimatedDataset({
     } else {
       requestAnimationFrame(animate)
     }
-  }, [dataset, init, keyFn, ref, tag, attrs, duration, disableAnimation])
+  }, [
+    dataset,
+    unparsedInit,
+    keyFn,
+    ref,
+    tag,
+    unparsedAttrs,
+    duration,
+    disableAnimation,
+    unparsedEvents,
+  ])
 
   return React.createElement('g', { ref })
 }

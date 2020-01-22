@@ -83,4 +83,49 @@ describe(AnimatedDataset, () => {
 
     expect(wrapper.find('g').html()).toMatchInlineSnapshot(`"<g><text>Hello World</text></g>"`)
   })
+
+  it('should accept camel case attribute name', () => {
+    const wrapper = mount(
+      <svg>
+        <AnimatedDataset dataset={dataset} attrs={{ strokeWidth: 10 }} key={p => p.x} />
+      </svg>
+    )
+
+    expect(wrapper.find('g').html()).toMatchInlineSnapshot(
+      `"<g><rect stroke-width=\\"10\\"></rect><rect stroke-width=\\"10\\"></rect></g>"`
+    )
+  })
+
+  it('should accept events', () => {
+    const onClick = jest.fn()
+
+    const wrapper = mount(
+      <svg>
+        <AnimatedDataset
+          tag="rect"
+          dataset={dataset}
+          attrs={attrs}
+          key={p => p.x}
+          events={{ onClick }}
+          disableAnimation
+        />
+      </svg>
+    )
+
+    expect(onClick).toBeCalledTimes(0)
+
+    const index = 1
+    const firstCircle = wrapper
+      .find('g')
+      .getDOMNode()
+      .getElementsByTagName('rect')
+      .item(index)
+    dispatch(firstCircle, new Event('click'))
+
+    expect(onClick).toBeCalledTimes(1)
+
+    const callArguments = onClick.mock.calls[0]
+    expect(callArguments[0]).toEqual(dataset[index])
+    expect(callArguments[1]).toEqual(index)
+  })
 })
