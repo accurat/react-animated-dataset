@@ -6,6 +6,9 @@
   "repository": "https://github.com/accurat/react-animated-dataset.git",
   "license": "MIT",
   "private": false,
+  "files": [
+    "src"
+  ],
   "scripts": {
     "test": "jest",
     "release": "np"
