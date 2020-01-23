@@ -258,3 +258,9 @@ If `true` animation is disabled and the data is updated immediately.
 - Default: `1000`
 
 The animation duration in milliseconds.
+
+## Contributing
+
+If you make some edits and wish to test them locally you can run `yarn test`.
+
+To publish run `yarn release`.
