@@ -69,4 +69,19 @@ describe(AnimatedDataset, () => {
 
     expect(wrapper.find('g').html()).toMatchInlineSnapshot(`"<g></g>"`)
   })
+
+  it('should add text attr as child only', () => {
+    const wrapper = mount(
+      <svg>
+        <AnimatedDataset
+          dataset={['Hello World']}
+          tag="text"
+          attrs={{ text: t => t }}
+          key={t => t}
+        />
+      </svg>
+    )
+
+    expect(wrapper.find('g').html()).toMatchInlineSnapshot(`"<g><text>Hello World</text></g>"`)
+  })
 })

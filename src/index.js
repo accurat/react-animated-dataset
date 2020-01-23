@@ -16,7 +16,7 @@ export function AnimatedDataset({
   React.useLayoutEffect(() => {
     if (!ref.current) return
 
-    const attrsList = Object.keys(attrs).filter(a => !a.startsWith('on-'))
+    const attrsList = Object.keys(attrs).filter(a => !a.startsWith('on-') && a !== 'text')
     const attrsListListeners = Object.keys(attrs).filter(a => a.startsWith('on-'))
     const oldAttrs = refOldAttrs.current || {}
 
