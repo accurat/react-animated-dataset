@@ -1,7 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-
-import { AnimatedDataset } from '../src/index'
+import { AnimatedDataset } from '../src/AnimatedDataset'
 
 afterEach(() => {
   jest.clearAllMocks()

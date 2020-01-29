@@ -1,5 +1,6 @@
 import React from 'react'
-import * as d3 from 'd3'
+import { select } from 'd3-selection'
+import 'd3-transition'
 
 export function AnimatedDataset({
   dataset,
@@ -21,7 +22,7 @@ export function AnimatedDataset({
     const oldAttrs = refOldAttrs.current || {}
 
     const animate = () => {
-      d3.select(ref.current)
+      select(ref.current)
         .selectAll(tag)
         .data(dataset, keyFn)
         .join(
