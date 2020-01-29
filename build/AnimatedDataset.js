@@ -1,13 +1,6 @@
-import 'core-js/modules/es.array.filter';
-import 'core-js/modules/es.array.for-each';
-import 'core-js/modules/es.array.join';
-import 'core-js/modules/es.object.keys';
-import 'core-js/modules/es.regexp.exec';
-import 'core-js/modules/es.string.match';
-import 'core-js/modules/es.string.starts-with';
-import 'core-js/modules/web.dom-collections.for-each';
 import React from 'react';
-import { select } from 'd3';
+import { select } from 'd3-selection';
+import 'd3-transition';
 
 function AnimatedDataset(_ref) {
   var dataset = _ref.dataset,
