@@ -24,7 +24,7 @@ describe(AnimatedDataset, () => {
           tag="rect"
           dataset={dataset}
           attrs={attrs}
-          key={p => p.x}
+          keyFn={p => p.x}
           disableAnimation
         />
       </svg>
@@ -43,7 +43,7 @@ describe(AnimatedDataset, () => {
 
     const wrapper = mount(
       <svg>
-        <AnimatedDataset tag="rect" dataset={dataset} attrs={attrs} key={p => p.x} />
+        <AnimatedDataset tag="rect" dataset={dataset} attrs={attrs} keyFn={p => p.x} />
       </svg>
     )
 
@@ -59,7 +59,7 @@ describe(AnimatedDataset, () => {
   it('should render empty <g> with empty dataset', () => {
     const wrapper = mount(
       <svg>
-        <AnimatedDataset dataset={[]} attrs={attrs} key={p => p.x} />
+        <AnimatedDataset dataset={[]} attrs={attrs} keyFn={p => p.x} />
       </svg>
     )
 
@@ -76,7 +76,7 @@ describe(AnimatedDataset, () => {
           dataset={['Hello World']}
           tag="text"
           attrs={{ text: t => t }}
-          key={t => t}
+          keyFn={t => t}
         />
       </svg>
     )
