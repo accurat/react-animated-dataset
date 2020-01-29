@@ -206,18 +206,18 @@ As it can be seen in the result, `AnimatedDataset` supports _path morphing_ and 
 </h3>
 
 - **Required**
-- Type: `{[key: string]: number | string | ((datum: any, index: int, dataset: Array<any>) => number | string)}`
+- Type: `{[key: string]: number | string | ((datum: any, index: int, nodes: Array<SVGElement>) => number | string)}`
 
 `attrs` keys should be an attribute name for given `tag`. They must be in kebab-case.
 
-`attrs` values should be the actual value or a function to calculate the value. Function accepts as parameter a single datum, its index and the entire dataset.
+`attrs` values should be the actual value or a function to calculate the value. Function accepts as parameter a single datum, its index and the array of rendered svg elements (the d3 selection).
 
 ```jsx
 <AnimatedDataset
   attrs={{
     stroke: 'black',
     'stroke-width': datum => datum.someValue * 10,
-    fill: (datum, index, dataset) => ...
+    fill: (datum, index, nodes) => ...
   }}
 />
 ```
@@ -228,7 +228,7 @@ It also accepts events listener where keys follow the signature `"on-<eventname>
 <AnimatedDataset
   attrs = {{
     'on-click': datum => console.log(datum),
-    'on-mouseover': (datum, index, dataset) => ...
+    'on-mouseover': (datum, index, nodes) => ...
   }}
 />
 ```
