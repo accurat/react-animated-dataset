@@ -2,16 +2,22 @@
   "name": "react-animated-dataset",
   "version": "0.0.2",
   "description": "React component for data animation",
-  "module": "src/index.js",
+  "main": "build/AnimatedDataset.js",
+  "module": "build/AnimatedDataset.js",
   "repository": "https://github.com/accurat/react-animated-dataset.git",
   "license": "MIT",
-  "private": false,
   "files": [
-    "src"
+    "build"
   ],
   "scripts": {
+    "build": "rollup -c",
     "test": "jest",
     "release": "np"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
   },
   "dependencies": {
     "d3": "^5.15.0",
@@ -21,19 +27,12 @@
     "babel-preset-accurapp": "^5.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "eslint-config-accurapp": "^5.0.0",
     "jest": "^24.9.0",
     "jest-config-accurapp": "^4.1.0",
     "np": "^5.2.1",
-    "react-dom": "^16.12.0"
-  },
-  "babel": {
-    "presets": [
-      "accurapp"
-    ]
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
+    "react-dom": "^16.12.0",
+    "rollup": "^1.30.1",
+    "rollup-plugin-babel": "^4.3.3"
   }
 }
