@@ -12,7 +12,8 @@
   "scripts": {
     "build": "rollup -c",
     "test": "jest",
-    "release": "np"
+    "release": "echo release",
+    "prerelease": "yarn build"
   },
   "peerDependencies": {
     "d3-selection": "^1.4.1",
