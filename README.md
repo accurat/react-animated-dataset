@@ -54,6 +54,14 @@ The component is designed to transform and animate dataset of any shape into any
 yarn add react-animated-dataset
 ```
 
+Note that, for this package to work, `react` and `d3` are also needed. If you haven't already installed them, install them with
+
+```bash
+yarn add react react-dom d3
+```
+
+More specifically, this package uses only `d3-selection` and `d3-transition` from the whole d3 ecosystem.
+
 ## Usage
 
 The component creates a svg element (specified in `tag`) for each value of `dataset`. `tag` attributes are inferred from `attrs` object where _keys_ are the attribute name and _values_ can be the actual attribute value or a function that returns the value from a single dataset value (see example above).
