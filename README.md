@@ -7,12 +7,16 @@ Without animation you used to do something like:
 ```jsx
 const dataset = [{ x: 10, y: 10 }, ... ]
 
-dataset.map(p => {
-  const cx = p.x
-  const cy = p.y
+return (
+  <svg>
+    {dataset.map(p => {
+      const cx = p.x
+      const cy = p.y
 
-  return <circle key={p.y} cx={cx} cy={cy} r={4} />
-})
+      return <circle key={p.y} cx={cx} cy={cy} r={4} />
+    })}
+  </svg>
+)
 ```
 
 This can be easly translated into this:
@@ -20,18 +24,24 @@ This can be easly translated into this:
 ```jsx
 import { AnimatedDataset } from 'react-animated-dataset'
 
+// ...
+
 const dataset = [{ x: 10, y: 10 }, ... ]
 
-<AnimatedDataset
-  dataset={dataset}
-  tag="circle"
-  attrs={{
-    cx: p => p.x,
-    cy: p => p.y,
-    r: 4,
-  }}
-  keyFn={p => p.y}
-/>
+return (
+  <svg>
+    <AnimatedDataset
+      dataset={dataset}
+      tag="circle"
+      attrs={{
+        cx: p => p.x,
+        cy: p => p.y,
+        r: 4,
+      }}
+      keyFn={p => p.y}
+    />
+  </svg>
+)
 ```
 
 And it comes with animations too!
@@ -176,14 +186,14 @@ As it can be seen in the result, `AnimatedDataset` supports _path morphing_ and 
 
 ## Props
 
-<h3 id="dataset"> 
+<h3 id="dataset">
   <a  href="#dataset">#</a> dataset
 </h3>
 
 - **Required**
 - Type: `Array<any>`
 
-<h3 id="attrs"> 
+<h3 id="attrs">
   <a  href="#attrs">#</a> attrs
 </h3>
 
@@ -215,7 +225,7 @@ It also accepts events listener where keys follow the signature `"on-<eventname>
 />
 ```
 
-<h3 id="tag"> 
+<h3 id="tag">
   <a  href="#tag">#</a> tag
 </h3>
 
@@ -224,7 +234,7 @@ It also accepts events listener where keys follow the signature `"on-<eventname>
 
 Any valid svg tag name.
 
-<h3 id="keyFn"> 
+<h3 id="keyFn">
   <a  href="#keyFn">#</a> keyFn
 </h3>
 
@@ -233,7 +243,7 @@ Any valid svg tag name.
 
 A function that identifies dataset values. It should return an unique value for each datum.
 
-<h3 id="init"> 
+<h3 id="init">
   <a  href="#init">#</a> init
 </h3>
 
@@ -241,7 +251,7 @@ A function that identifies dataset values. It should return an unique value for 
 
 Same as [attrs](#-attrs). `init` values are used to animate entering and exiting values. It doesn't support event listeners.
 
-<h3 id="disableAnimation"> 
+<h3 id="disableAnimation">
   <a  href="#disableAnimation">#</a> disableAnimation
 </h3>
 
@@ -250,7 +260,7 @@ Same as [attrs](#-attrs). `init` values are used to animate entering and exiting
 
 If `true` animation is disabled and the data is updated immediately.
 
-<h3 id="duration"> 
+<h3 id="duration">
   <a  href="#duration">#</a> duration
 </h3>
 
