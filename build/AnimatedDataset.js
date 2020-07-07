@@ -15,9 +15,11 @@ function AnimatedDataset(_ref) {
   } : _ref$keyFn,
       _ref$duration = _ref.duration,
       duration = _ref$duration === void 0 ? 1000 : _ref$duration,
+      _ref$delay = _ref.delay,
+      delay = _ref$delay === void 0 ? 0 : _ref$delay,
       _ref$disableAnimation = _ref.disableAnimation,
       disableAnimation = _ref$disableAnimation === void 0 ? false : _ref$disableAnimation;
-  var ref = React.createRef();
+  var ref = /*#__PURE__*/React.createRef();
   var refOldAttrs = React.useRef();
   React.useLayoutEffect(function () {
     if (!ref.current) return;
@@ -41,21 +43,21 @@ function AnimatedDataset(_ref) {
             sel.on(eventName, attrs[a]);
           });
         }).call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().duration(duration);
+          var tran = disableAnimation ? sel : sel.transition().delay(delay).duration(duration);
           attrsList.forEach(function (a) {
             tran.attr(a, attrs[a]);
           });
         });
       }, function (update) {
         return update.text(attrs.text).call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().duration(duration);
+          var tran = disableAnimation ? sel : sel.transition().delay(delay).duration(duration);
           attrsList.forEach(function (a) {
             tran.attr(a, attrs[a]);
           });
         });
       }, function (exit) {
         return exit.call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().duration(duration);
+          var tran = disableAnimation ? sel : sel.transition().delay(delay).duration(duration);
           attrsList.forEach(function (a) {
             tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove();
           });
@@ -70,7 +72,7 @@ function AnimatedDataset(_ref) {
       requestAnimationFrame(animate);
     }
   }, [dataset, init, keyFn, ref, tag, attrs, duration, disableAnimation]);
-  return React.createElement('g', {
+  return /*#__PURE__*/React.createElement('g', {
     ref: ref
   });
 }

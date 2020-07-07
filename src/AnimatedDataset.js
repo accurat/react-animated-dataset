@@ -9,6 +9,7 @@ export function AnimatedDataset({
   init = {},
   keyFn = d => d.key,
   duration = 1000,
+  delay = 0,
   disableAnimation = false,
 }) {
   const ref = React.createRef()
@@ -49,7 +50,12 @@ export function AnimatedDataset({
                 })
               })
               .call(sel => {
-                const tran = disableAnimation ? sel : sel.transition().duration(duration)
+                const tran = disableAnimation
+                  ? sel
+                  : sel
+                      .transition()
+                      .delay(delay)
+                      .duration(duration)
 
                 attrsList.forEach(a => {
                   tran.attr(a, attrs[a])
@@ -57,7 +63,12 @@ export function AnimatedDataset({
               }),
           update =>
             update.text(attrs.text).call(sel => {
-              const tran = disableAnimation ? sel : sel.transition().duration(duration)
+              const tran = disableAnimation
+                ? sel
+                : sel
+                    .transition()
+                    .delay(delay)
+                    .duration(duration)
 
               attrsList.forEach(a => {
                 tran.attr(a, attrs[a])
@@ -65,7 +76,12 @@ export function AnimatedDataset({
             }),
           exit =>
             exit.call(sel => {
-              const tran = disableAnimation ? sel : sel.transition().duration(duration)
+              const tran = disableAnimation
+                ? sel
+                : sel
+                    .transition()
+                    .delay(delay)
+                    .duration(duration)
 
               attrsList.forEach(a => {
                 tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
