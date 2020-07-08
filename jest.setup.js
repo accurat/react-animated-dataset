@@ -10,7 +10,7 @@ global.dispatch = (node, event) =>
     node.dispatchEvent(event)
   })
 
-global.sleep = ms => new Promise(res => setTimeout(res, ms))
+global.sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export default {
   ...accurappConfig,
