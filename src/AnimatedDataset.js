@@ -112,6 +112,7 @@ export function AnimatedDataset({
     duration,
     disableAnimation,
     unparsedEvents,
+    delay,
   ])
 
   return React.createElement('g', { ref })

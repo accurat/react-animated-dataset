@@ -148,7 +148,7 @@ function AnimatedDataset(_ref) {
     } else {
       requestAnimationFrame(animate);
     }
-  }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents]);
+  }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents, delay]);
   return /*#__PURE__*/React.createElement('g', {
     ref: ref
   });
