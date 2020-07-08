@@ -90,7 +90,7 @@ const lettersDataset = randomLetters()
     y: 40,
     text: letter => letter,
     fill: 'black',
-    'font-size': 50,
+    fontSize: 50,
   }}
   keyFn={letter => letter}
 />
@@ -139,7 +139,7 @@ const lineGenerator = d3
     y1: tick => yScale(tick),
     y2: tick => yScale(tick),
     stroke: 'lightgrey',
-    'stroke-width': tick => (tick === 0 ? 2 : 1),
+    strokeWidth: tick => (tick === 0 ? 2 : 1),
     opacity: tick => (tick === 0 ? 1 : 0.5),
   }}
   keyFn={tick => tick}
@@ -206,9 +206,9 @@ As it can be seen in the result, `AnimatedDataset` supports _path morphing_ and 
 </h3>
 
 - **Required**
-- Type: `{[key: string]: number | string | ((datum: any, index: int, nodes: Array<SVGElement>) => number | string)}`
+- Type: `{[key: string]: number | string | ((datum: any, index: number, nodes: Array<SVGElement>) => number | string)}`
 
-`attrs` keys should be an attribute name for given `tag`. They must be in kebab-case.
+`attrs` keys should be an attribute name for given `tag`. They can be kebab-case (`stroke-width`) or camel case (`strokeWidth`).
 
 `attrs` values should be the actual value or a function to calculate the value. Function accepts as parameter a single datum, its index and the array of rendered svg elements (the d3 selection).
 
@@ -216,19 +216,20 @@ As it can be seen in the result, `AnimatedDataset` supports _path morphing_ and 
 <AnimatedDataset
   attrs={{
     stroke: 'black',
-    'stroke-width': datum => datum.someValue * 10,
+    strokeWidth: datum => datum.someValue * 10,
+    'font-size': 15,
     fill: (datum, index, nodes) => ...
   }}
 />
 ```
 
-It also accepts events listener where keys follow the signature `"on-<eventname>"` and values are functions.
+It also accepts events listener. They can be in kebab-case (`on-mouseover`) or camel case (`onMouseOver`).
 
 ```jsx
 <AnimatedDataset
   attrs = {{
     'on-click': datum => console.log(datum),
-    'on-mouseover': (datum, index, nodes) => ...
+    onMouseOver: (datum, index, nodes) => ...
   }}
 />
 ```
@@ -246,7 +247,7 @@ Any valid svg tag name.
   <a  href="#keyFn">#</a> keyFn
 </h3>
 
-- Type: `(datum: any, index: number, dataset: Array<any>) => any`
+- Type: `(datum: any, index: number, nodes: Array<SVGElement>) => any`
 - Default: `datum => datum.key`
 
 A function that identifies dataset values. It should return an unique value for each datum.
@@ -255,7 +256,7 @@ A function that identifies dataset values. It should return an unique value for 
   <a  href="#init">#</a> init
 </h3>
 
-- Type: `{[key: string]: number | string | ((datum: any, index: int, dataset: Array<any>) => number | string)}`
+- Type: `{[key: string]: number | string | ((datum: any, index: number, nodes: Array<SVGElement>) => number | string)}`
 
 Same as [attrs](#-attrs). `init` values are used to animate entering and exiting values. It doesn't support event listeners.
 
@@ -272,10 +273,19 @@ If `true` animation is disabled and the data is updated immediately.
   <a  href="#duration">#</a> duration
 </h3>
 
-- Type: `number`
+- Type: `number | (datum: any, index: number , nodes: Array<SVGElement>) => number`
 - Default: `1000`
 
 The animation duration in milliseconds.
+
+<h3 id="delay">
+  <a  href="#delay">#</a> delay
+</h3>
+
+- Type: `number | (datum: any, index: number , nodes: Array<SVGElement>) => number`
+- Default: `0`
+
+The animation delay in milliseconds.
 
 ## Contributing
 
