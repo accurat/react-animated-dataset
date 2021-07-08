@@ -228,8 +228,8 @@ It also accepts events listener. They can be in kebab-case (`on-mouseover`) or c
 ```jsx
 <AnimatedDataset
   events={{
-    'on-click': datum => console.log(datum),
-    onMouseOver: (datum, index, nodes) => ...
+    'on-click': (mouseEvent, datum) => console.log(datum),
+    onMouseOver: (mouseEvent, datum) => ...
   }}
 />
 ```
