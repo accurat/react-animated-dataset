@@ -223,13 +223,19 @@ As it can be seen in the result, `AnimatedDataset` supports _path morphing_ and 
 />
 ```
 
-It also accepts events listener. They can be in kebab-case (`on-mouseover`) or camel case (`onMouseOver`).
+<h3 id="events">
+  <a  href="#events">#</a> events
+</h3>
+
+- Type: `{ [key: string]: (mouseEvent: MouseEvent, datum: any) => void }`
+
+Event listeners keys can be written in kebab-case (`on-mouseover`) or camel case (`onMouseOver`).
 
 ```jsx
 <AnimatedDataset
-  attrs = {{
-    'on-click': datum => console.log(datum),
-    onMouseOver: (datum, index, nodes) => ...
+  events={{
+    'on-click': (mouseEvent, datum) => console.log(datum),
+    onMouseOver: (mouseEvent, datum) => ...
   }}
 />
 ```
