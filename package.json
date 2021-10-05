@@ -1,6 +1,6 @@
 {
   "name": "react-animated-dataset",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React component for data animation",
   "main": "build/AnimatedDataset.js",
   "module": "build/AnimatedDataset.js",
