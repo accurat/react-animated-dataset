@@ -1,6 +1,7 @@
 import React from 'react';
 import { select } from 'd3-selection';
 import 'd3-transition';
+import { easeCubic } from 'd3-ease';
 
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
@@ -95,7 +96,9 @@ function AnimatedDataset(_ref) {
       _ref$delay = _ref.delay,
       delay = _ref$delay === void 0 ? 0 : _ref$delay,
       _ref$disableAnimation = _ref.disableAnimation,
-      disableAnimation = _ref$disableAnimation === void 0 ? false : _ref$disableAnimation;
+      disableAnimation = _ref$disableAnimation === void 0 ? false : _ref$disableAnimation,
+      _ref$easing = _ref.easing,
+      easing = _ref$easing === void 0 ? easeCubic : _ref$easing;
   var ref = /*#__PURE__*/React.createRef();
   var refOldAttrs = React.useRef();
   React.useLayoutEffect(function () {
@@ -120,21 +123,21 @@ function AnimatedDataset(_ref) {
             sel.on(event, events[event]);
           });
         }).call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().delay(delay).duration(duration);
+          var tran = disableAnimation ? sel : sel.transition().ease(easing).delay(delay).duration(duration);
           attrsList.forEach(function (a) {
             tran.attr(a, attrs[a]);
           });
         });
       }, function (update) {
         return update.text(attrs.text).call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().delay(delay).duration(duration);
+          var tran = disableAnimation ? sel : sel.transition().ease(easing).delay(delay).duration(duration);
           attrsList.forEach(function (a) {
             tran.attr(a, attrs[a]);
           });
         });
       }, function (exit) {
         return exit.call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().delay(delay).duration(duration);
+          var tran = disableAnimation ? sel : sel.transition().ease(easing).delay(delay).duration(duration);
           attrsList.forEach(function (a) {
             tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove();
           });
@@ -148,7 +151,7 @@ function AnimatedDataset(_ref) {
     } else {
       requestAnimationFrame(animate);
     }
-  }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents, delay]);
+  }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents, delay, easing]);
   return /*#__PURE__*/React.createElement('g', {
     ref: ref
   });

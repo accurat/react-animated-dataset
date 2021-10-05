@@ -1,6 +1,7 @@
 import React from 'react'
 import { select } from 'd3-selection'
 import 'd3-transition'
+import { easeCubic } from 'd3-ease'
 import { mapKeys } from './mapKey'
 import { parseAttributeName, parseEventName } from './parse'
 
@@ -14,6 +15,7 @@ export function AnimatedDataset({
   duration = 1000,
   delay = 0,
   disableAnimation = false,
+  easing = easeCubic,
 }) {
   const ref = React.createRef()
   const refOldAttrs = React.useRef()
@@ -60,6 +62,7 @@ export function AnimatedDataset({
                   ? sel
                   : sel
                       .transition()
+                      .ease(easing)
                       .delay(delay)
                       .duration(duration)
 
@@ -73,6 +76,7 @@ export function AnimatedDataset({
                 ? sel
                 : sel
                     .transition()
+                    .ease(easing)
                     .delay(delay)
                     .duration(duration)
 
@@ -86,6 +90,7 @@ export function AnimatedDataset({
                 ? sel
                 : sel
                     .transition()
+                    .ease(easing)
                     .delay(delay)
                     .duration(duration)
 
@@ -113,6 +118,7 @@ export function AnimatedDataset({
     disableAnimation,
     unparsedEvents,
     delay,
+    easing,
   ])
 
   return React.createElement('g', { ref })
