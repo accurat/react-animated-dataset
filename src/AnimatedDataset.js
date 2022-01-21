@@ -15,6 +15,7 @@ export function AnimatedDataset({
   duration = 1000,
   delay = 0,
   disableAnimation = false,
+  disableAnimationForAttributes = [],
   easing = easeCubic,
 }) {
   const ref = React.createRef()
@@ -67,7 +68,9 @@ export function AnimatedDataset({
                       .duration(duration)
 
                 attrsList.forEach(a => {
-                  tran.attr(a, attrs[a])
+                  disableAnimationForAttributes.includes(a)
+                  ? sel.attr(a, attrs[a])
+                  : tran.attr(a, attrs[a]);
                 })
               }),
           update =>
@@ -81,7 +84,9 @@ export function AnimatedDataset({
                     .duration(duration)
 
               attrsList.forEach(a => {
-                tran.attr(a, attrs[a])
+                disableAnimationForAttributes.includes(a)
+                ? sel.attr(a, attrs[a])
+                : tran.attr(a, attrs[a]);
               })
             }),
           exit =>
@@ -95,7 +100,9 @@ export function AnimatedDataset({
                     .duration(duration)
 
               attrsList.forEach(a => {
-                tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
+                disableAnimationForAttributes.includes(a)
+                ? sel.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
+                : tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
               })
             })
         )
