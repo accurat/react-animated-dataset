@@ -27,6 +27,9 @@ export function AnimatedDataset({
     const attrs = mapKeys(unparsedAttrs, parseAttributeName)
     const init = mapKeys(unparsedInit, parseAttributeName)
     const events = mapKeys(unparsedEvents, parseEventName)
+    const disableAnimationForAttributesParsed = disableAnimationForAttributes.map(d =>
+      parseAttributeName(d)
+    )
 
     const attrsList = Object.keys(attrs).filter(a => a !== 'text')
     const eventsList = Object.keys(events)
@@ -68,9 +71,9 @@ export function AnimatedDataset({
                       .duration(duration)
 
                 attrsList.forEach(a => {
-                  disableAnimationForAttributes.includes(a)
-                  ? sel.attr(a, attrs[a])
-                  : tran.attr(a, attrs[a]);
+                  disableAnimationForAttributesParsed.includes(a)
+                    ? sel.attr(a, attrs[a])
+                    : tran.attr(a, attrs[a])
                 })
               }),
           update =>
@@ -84,9 +87,9 @@ export function AnimatedDataset({
                     .duration(duration)
 
               attrsList.forEach(a => {
-                disableAnimationForAttributes.includes(a)
-                ? sel.attr(a, attrs[a])
-                : tran.attr(a, attrs[a]);
+                disableAnimationForAttributesParsed.includes(a)
+                  ? sel.attr(a, attrs[a])
+                  : tran.attr(a, attrs[a])
               })
             }),
           exit =>
@@ -100,9 +103,9 @@ export function AnimatedDataset({
                     .duration(duration)
 
               attrsList.forEach(a => {
-                disableAnimationForAttributes.includes(a)
-                ? sel.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
-                : tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
+                disableAnimationForAttributesParsed.includes(a)
+                  ? sel.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
+                  : tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
               })
             })
         )
@@ -126,6 +129,7 @@ export function AnimatedDataset({
     unparsedEvents,
     delay,
     easing,
+    disableAnimationForAttributes,
   ])
 
   return React.createElement('g', { ref })
