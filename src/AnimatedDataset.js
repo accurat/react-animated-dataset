@@ -15,6 +15,9 @@ export function AnimatedDataset({
   duration = 1000,
   delay = 0,
   disableAnimation = false,
+  durationByAttr = {},
+  delayByAttr = {},
+  easingByAttr = {},
   easing = easeCubic,
 }) {
   const ref = React.createRef()
@@ -26,6 +29,9 @@ export function AnimatedDataset({
     const attrs = mapKeys(unparsedAttrs, parseAttributeName)
     const init = mapKeys(unparsedInit, parseAttributeName)
     const events = mapKeys(unparsedEvents, parseEventName)
+    const durationByAttrParsed = mapKeys(durationByAttr, parseAttributeName)
+    const delayByAttrParsed = mapKeys(delayByAttr, parseAttributeName)
+    const easingByAttrParsed = mapKeys(easingByAttr, parseAttributeName)
 
     const attrsList = Object.keys(attrs).filter(a => a !== 'text')
     const eventsList = Object.keys(events)
@@ -58,43 +64,52 @@ export function AnimatedDataset({
                 })
               })
               .call(sel => {
-                const tran = disableAnimation
-                  ? sel
-                  : sel
-                      .transition()
-                      .ease(easing)
-                      .delay(delay)
-                      .duration(duration)
-
                 attrsList.forEach(a => {
+                  const tran = disableAnimation
+                    ? sel
+                    : sel
+                        .transition(a)
+                        .ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing)
+                        .delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay)
+                        .duration(
+                          durationByAttrParsed.hasOwnProperty(a)
+                            ? durationByAttrParsed[a]
+                            : duration
+                        )
+
                   tran.attr(a, attrs[a])
                 })
               }),
           update =>
             update.text(attrs.text).call(sel => {
-              const tran = disableAnimation
-                ? sel
-                : sel
-                    .transition()
-                    .ease(easing)
-                    .delay(delay)
-                    .duration(duration)
-
               attrsList.forEach(a => {
+                const tran = disableAnimation
+                  ? sel
+                  : sel
+                      .transition(a)
+                      .ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing)
+                      .delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay)
+                      .duration(
+                        durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration
+                      )
+
                 tran.attr(a, attrs[a])
               })
             }),
+
           exit =>
             exit.call(sel => {
-              const tran = disableAnimation
-                ? sel
-                : sel
-                    .transition()
-                    .ease(easing)
-                    .delay(delay)
-                    .duration(duration)
-
               attrsList.forEach(a => {
+                const tran = disableAnimation
+                  ? sel
+                  : sel
+                      .transition(a)
+                      .ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing)
+                      .delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay)
+                      .duration(
+                        durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration
+                      )
+
                 tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove()
               })
             })
@@ -119,6 +134,9 @@ export function AnimatedDataset({
     unparsedEvents,
     delay,
     easing,
+    durationByAttr,
+    delayByAttr,
+    easingByAttr,
   ])
 
   return React.createElement('g', { ref })
