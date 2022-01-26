@@ -293,6 +293,30 @@ The animation duration in milliseconds.
 
 The animation delay in milliseconds.
 
+<h3 id="durationByAttr">
+  <a  href="#durationByAttr">#</a> durationByAttr
+</h3>
+
+- Type: `{[key: string]: number | ((datum: any, index: number, nodes: Array<SVGElement>) => number)}`
+
+If defined, allows to specify a different animation duration for each attribute
+
+<h3 id="delayByAttr">
+  <a  href="#delayByAttr">#</a> delayByAttr
+</h3>
+
+- Type: `{[key: string]: number | ((datum: any, index: number, nodes: Array<SVGElement>) => number)}`
+
+If defined, allows to specify a different animation delay for each attribute
+
+<h3 id="easingByAttr">
+  <a  href="#easingByAttr">#</a> easingByAttr
+</h3>
+
+- Type: `{[key: string]: number | ((datum: any, index: number, nodes: Array<SVGElement>) => number)}`
+
+If defined, allows to specify a different animation easing for each attribute
+
 ## Contributing
 
 If you make some edits and wish to test them locally you can run `yarn test`.
