@@ -5,6 +5,9 @@
   "main": "build/AnimatedDataset.js",
   "module": "build/AnimatedDataset.js",
   "repository": "https://github.com/accurat/react-animated-dataset.git",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "license": "MIT",
   "files": [
     "build"

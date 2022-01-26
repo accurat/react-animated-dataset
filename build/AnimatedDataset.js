@@ -97,6 +97,12 @@ function AnimatedDataset(_ref) {
       delay = _ref$delay === void 0 ? 0 : _ref$delay,
       _ref$disableAnimation = _ref.disableAnimation,
       disableAnimation = _ref$disableAnimation === void 0 ? false : _ref$disableAnimation,
+      _ref$durationByAttr = _ref.durationByAttr,
+      durationByAttr = _ref$durationByAttr === void 0 ? {} : _ref$durationByAttr,
+      _ref$delayByAttr = _ref.delayByAttr,
+      delayByAttr = _ref$delayByAttr === void 0 ? {} : _ref$delayByAttr,
+      _ref$easingByAttr = _ref.easingByAttr,
+      easingByAttr = _ref$easingByAttr === void 0 ? {} : _ref$easingByAttr,
       _ref$easing = _ref.easing,
       easing = _ref$easing === void 0 ? easeCubic : _ref$easing;
   var ref = /*#__PURE__*/React.createRef();
@@ -106,6 +112,9 @@ function AnimatedDataset(_ref) {
     var attrs = mapKeys(unparsedAttrs, parseAttributeName);
     var init = mapKeys(unparsedInit, parseAttributeName);
     var events = mapKeys(unparsedEvents, parseEventName);
+    var durationByAttrParsed = mapKeys(durationByAttr, parseAttributeName);
+    var delayByAttrParsed = mapKeys(delayByAttr, parseAttributeName);
+    var easingByAttrParsed = mapKeys(easingByAttr, parseAttributeName);
     var attrsList = Object.keys(attrs).filter(function (a) {
       return a !== 'text';
     });
@@ -123,22 +132,22 @@ function AnimatedDataset(_ref) {
             sel.on(event, events[event]);
           });
         }).call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().ease(easing).delay(delay).duration(duration);
           attrsList.forEach(function (a) {
+            var tran = disableAnimation ? sel : sel.transition(a).ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing).delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay).duration(durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration);
             tran.attr(a, attrs[a]);
           });
         });
       }, function (update) {
         return update.text(attrs.text).call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().ease(easing).delay(delay).duration(duration);
           attrsList.forEach(function (a) {
+            var tran = disableAnimation ? sel : sel.transition(a).ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing).delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay).duration(durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration);
             tran.attr(a, attrs[a]);
           });
         });
       }, function (exit) {
         return exit.call(function (sel) {
-          var tran = disableAnimation ? sel : sel.transition().ease(easing).delay(delay).duration(duration);
           attrsList.forEach(function (a) {
+            var tran = disableAnimation ? sel : sel.transition(a).ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing).delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay).duration(durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration);
             tran.attr(a, init.hasOwnProperty(a) ? init[a] : attrs[a]).remove();
           });
         });
@@ -151,7 +160,7 @@ function AnimatedDataset(_ref) {
     } else {
       requestAnimationFrame(animate);
     }
-  }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents, delay, easing]);
+  }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents, delay, easing, durationByAttr, delayByAttr, easingByAttr]);
   return /*#__PURE__*/React.createElement('g', {
     ref: ref
   });
