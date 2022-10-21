@@ -6,22 +6,19 @@ import { easeCubic } from 'd3-ease';
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
-
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
 }
-
 function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+  if (_i == null) return;
   var _arr = [];
   var _n = true;
   var _d = false;
-  var _e = undefined;
-
+  var _s, _e;
   try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
       _arr.push(_s.value);
-
       if (i && _arr.length === i) break;
     }
   } catch (err) {
@@ -34,10 +31,8 @@ function _iterableToArrayLimit(arr, i) {
       if (_d) throw _e;
     }
   }
-
   return _arr;
 }
-
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -46,15 +41,11 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
-
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-
   for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
   return arr2;
 }
-
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
@@ -63,9 +54,8 @@ function mapKeys(obj, fn) {
   var entries = Object.entries(obj);
   var mapped = entries.map(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),
-        k = _ref2[0],
-        v = _ref2[1];
-
+      k = _ref2[0],
+      v = _ref2[1];
     return [fn(k), v];
   });
   return Object.fromEntries(mapped);
@@ -80,31 +70,31 @@ function parseEventName(str) {
 
 function AnimatedDataset(_ref) {
   var dataset = _ref.dataset,
-      unparsedAttrs = _ref.attrs,
-      _ref$tag = _ref.tag,
-      tag = _ref$tag === void 0 ? 'rect' : _ref$tag,
-      _ref$init = _ref.init,
-      unparsedInit = _ref$init === void 0 ? {} : _ref$init,
-      _ref$events = _ref.events,
-      unparsedEvents = _ref$events === void 0 ? {} : _ref$events,
-      _ref$keyFn = _ref.keyFn,
-      keyFn = _ref$keyFn === void 0 ? function (d) {
-    return d.key;
-  } : _ref$keyFn,
-      _ref$duration = _ref.duration,
-      duration = _ref$duration === void 0 ? 1000 : _ref$duration,
-      _ref$delay = _ref.delay,
-      delay = _ref$delay === void 0 ? 0 : _ref$delay,
-      _ref$disableAnimation = _ref.disableAnimation,
-      disableAnimation = _ref$disableAnimation === void 0 ? false : _ref$disableAnimation,
-      _ref$durationByAttr = _ref.durationByAttr,
-      durationByAttr = _ref$durationByAttr === void 0 ? {} : _ref$durationByAttr,
-      _ref$delayByAttr = _ref.delayByAttr,
-      delayByAttr = _ref$delayByAttr === void 0 ? {} : _ref$delayByAttr,
-      _ref$easingByAttr = _ref.easingByAttr,
-      easingByAttr = _ref$easingByAttr === void 0 ? {} : _ref$easingByAttr,
-      _ref$easing = _ref.easing,
-      easing = _ref$easing === void 0 ? easeCubic : _ref$easing;
+    unparsedAttrs = _ref.attrs,
+    _ref$tag = _ref.tag,
+    tag = _ref$tag === void 0 ? 'rect' : _ref$tag,
+    _ref$init = _ref.init,
+    unparsedInit = _ref$init === void 0 ? {} : _ref$init,
+    _ref$events = _ref.events,
+    unparsedEvents = _ref$events === void 0 ? {} : _ref$events,
+    _ref$keyFn = _ref.keyFn,
+    keyFn = _ref$keyFn === void 0 ? function (d) {
+      return d.key;
+    } : _ref$keyFn,
+    _ref$duration = _ref.duration,
+    duration = _ref$duration === void 0 ? 1000 : _ref$duration,
+    _ref$delay = _ref.delay,
+    delay = _ref$delay === void 0 ? 0 : _ref$delay,
+    _ref$disableAnimation = _ref.disableAnimation,
+    disableAnimation = _ref$disableAnimation === void 0 ? false : _ref$disableAnimation,
+    _ref$durationByAttr = _ref.durationByAttr,
+    durationByAttr = _ref$durationByAttr === void 0 ? {} : _ref$durationByAttr,
+    _ref$delayByAttr = _ref.delayByAttr,
+    delayByAttr = _ref$delayByAttr === void 0 ? {} : _ref$delayByAttr,
+    _ref$easingByAttr = _ref.easingByAttr,
+    easingByAttr = _ref$easingByAttr === void 0 ? {} : _ref$easingByAttr,
+    _ref$easing = _ref.easing,
+    easing = _ref$easing === void 0 ? easeCubic : _ref$easing;
   var ref = /*#__PURE__*/React.createRef();
   var refOldAttrs = React.useRef();
   React.useLayoutEffect(function () {
@@ -120,7 +110,6 @@ function AnimatedDataset(_ref) {
     });
     var eventsList = Object.keys(events);
     var oldAttrs = refOldAttrs.current || {};
-
     var animate = function animate() {
       select(ref.current).selectAll(tag).data(dataset, keyFn).join(function (enter) {
         return enter.append(tag).text(attrs.text).call(function (sel) {
@@ -154,7 +143,6 @@ function AnimatedDataset(_ref) {
       });
       refOldAttrs.current = attrs;
     };
-
     if (disableAnimation) {
       animate();
     } else {
