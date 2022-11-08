@@ -2,6 +2,8 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { AnimatedDataset } from '../src/AnimatedDataset'
 
+console.log('React.version', React.version)
+
 afterEach(() => {
   jest.clearAllMocks()
 })

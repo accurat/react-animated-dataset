@@ -1,0 +1,23 @@
+name: Test CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        react-version: [16.x, 17.x, 18.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm install --legacy-peer-deps
+      - name: install react@${{ matrix.react-version }}
+        run: npm install react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }}
+      - name: run test
+        run: npm test
+        env:
+          CI: true
