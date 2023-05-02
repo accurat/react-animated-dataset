@@ -130,4 +130,29 @@ describe(AnimatedDataset, () => {
     expect(callArguments[0]).toEqual(dataset[index])
     expect(callArguments[1]).toEqual(index)
   })
+
+  it('should allow nested nodes', () => {
+    const wrapper = mount(
+      <svg>
+        <AnimatedDataset
+          dataset={['Hello World', 'Goodbye World']}
+          tag="a"
+          attrs={{ href: "#test" }}
+          keyFn={t => t}
+          disableAnimation
+        >
+          <AnimatedDataset
+            tag="text"
+            attrs={{ text: t => t }}
+            keyFn={t => t}
+            disableAnimation
+          />
+        </AnimatedDataset>
+      </svg>
+    )
+
+    expect(wrapper.find('g').first().html()).toMatchInlineSnapshot(
+      `"<g><a data-key=\\"Hello World\\" href=\\"#test\\"><g><text>Hello World</text></g></a><a data-key=\\"Goodbye World\\" href=\\"#test\\"><g><text>Goodbye World</text></g></a></g>"`
+    )
+  })
 })
