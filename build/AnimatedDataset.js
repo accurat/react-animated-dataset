@@ -94,7 +94,8 @@ function AnimatedDataset(_ref) {
     _ref$easingByAttr = _ref.easingByAttr,
     easingByAttr = _ref$easingByAttr === void 0 ? {} : _ref$easingByAttr,
     _ref$easing = _ref.easing,
-    easing = _ref$easing === void 0 ? easeCubic : _ref$easing;
+    easing = _ref$easing === void 0 ? easeCubic : _ref$easing,
+    children = _ref.children;
   var ref = /*#__PURE__*/React.createRef();
   var refOldAttrs = React.useRef();
   React.useLayoutEffect(function () {
@@ -111,8 +112,10 @@ function AnimatedDataset(_ref) {
     var eventsList = Object.keys(events);
     var oldAttrs = refOldAttrs.current || {};
     var animate = function animate() {
-      select(ref.current).selectAll(tag).data(dataset, keyFn).join(function (enter) {
-        return enter.append(tag).text(attrs.text).call(function (sel) {
+      select(ref.current).selectAll(tag).data(dataset, function (d) {
+        return d && keyFn(d) || select(this).attr("data-key");
+      }).join(function (enter) {
+        var enterEls = enter.append(tag).call(function (sel) {
           attrsList.forEach(function (a) {
             sel.attr(a, init.hasOwnProperty(a) ? init[a] : oldAttrs.hasOwnProperty(a) ? oldAttrs[a] : attrs[a]);
           });
@@ -126,13 +129,17 @@ function AnimatedDataset(_ref) {
             tran.attr(a, attrs[a]);
           });
         });
+        if (attrs.text) enterEls.text(attrs.text);
+        return enterEls;
       }, function (update) {
-        return update.text(attrs.text).call(function (sel) {
+        var updateEls = update.call(function (sel) {
           attrsList.forEach(function (a) {
             var tran = disableAnimation ? sel : sel.transition(a).ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing).delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay).duration(durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration);
             tran.attr(a, attrs[a]);
           });
         });
+        if (attrs.text) updateEls.text(attrs.text);
+        return updateEls;
       }, function (exit) {
         return exit.call(function (sel) {
           attrsList.forEach(function (a) {
@@ -151,7 +158,19 @@ function AnimatedDataset(_ref) {
   }, [dataset, unparsedInit, keyFn, ref, tag, unparsedAttrs, duration, disableAnimation, unparsedEvents, delay, easing, durationByAttr, delayByAttr, easingByAttr]);
   return /*#__PURE__*/React.createElement('g', {
     ref: ref
-  });
+  },
+  // Create the structure first so that react can add the children
+  children && dataset.map(function (data) {
+    return /*#__PURE__*/React.createElement(tag, {
+      key: keyFn(data),
+      'data-key': keyFn(data)
+    }, children && React.Children.toArray(children).map(function (child) {
+      return /*#__PURE__*/React.cloneElement(child, {
+        key: child.toString(),
+        dataset: [data]
+      });
+    }));
+  }));
 }
 
 export { AnimatedDataset };
