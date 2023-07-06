@@ -317,6 +317,14 @@ If defined, allows to specify a different animation delay for each attribute
 
 If defined, allows to specify a different animation easing for each attribute
 
+<h3 id="children">
+  <a  href="#children">#</a> children
+</h3>
+
+- Type: Any Valid React Node
+
+If defined, the child node(s) will be created for each entry in dataset, allowing for complex nesting hierarchies of react-animated-dataset
+
 ## Contributing
 
 If you make some edits and wish to test them locally you can run `yarn test`.

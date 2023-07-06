@@ -19,6 +19,7 @@ export function AnimatedDataset({
   delayByAttr = {},
   easingByAttr = {},
   easing = easeCubic,
+  children,
 }) {
   const ref = React.createRef()
   const refOldAttrs = React.useRef()
@@ -40,12 +41,11 @@ export function AnimatedDataset({
     const animate = () => {
       select(ref.current)
         .selectAll(tag)
-        .data(dataset, keyFn)
+        .data(dataset, function (d) { return (d && keyFn(d)) || select(this).attr("data-key"); })
         .join(
-          enter =>
-            enter
+          enter => {
+            const enterEls = enter
               .append(tag)
-              .text(attrs.text)
               .call(sel => {
                 attrsList.forEach(a => {
                   sel.attr(
@@ -79,23 +79,32 @@ export function AnimatedDataset({
 
                   tran.attr(a, attrs[a])
                 })
-              }),
-          update =>
-            update.text(attrs.text).call(sel => {
-              attrsList.forEach(a => {
-                const tran = disableAnimation
-                  ? sel
-                  : sel
-                      .transition(a)
-                      .ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing)
-                      .delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay)
-                      .duration(
-                        durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration
-                      )
-
-                tran.attr(a, attrs[a])
               })
-            }),
+            if (attrs.text) enterEls.text(attrs.text)
+            return enterEls
+          },
+
+          update => {
+            const updateEls = update
+              .call(sel => {
+                attrsList.forEach(a => {
+                    const tran = disableAnimation
+                      ? sel
+                      : sel
+                        .transition(a)
+                        .ease(easingByAttrParsed.hasOwnProperty(a) ? easingByAttrParsed[a] : easing)
+                        .delay(delayByAttrParsed.hasOwnProperty(a) ? delayByAttrParsed[a] : delay)
+                        .duration(
+                          durationByAttrParsed.hasOwnProperty(a) ? durationByAttrParsed[a] : duration
+                        )
+
+                    tran.attr(a, attrs[a])
+                  }
+                )
+              })
+            if (attrs.text) updateEls.text(attrs.text)
+            return updateEls;
+          },
 
           exit =>
             exit.call(sel => {
@@ -139,5 +148,17 @@ export function AnimatedDataset({
     easingByAttr,
   ])
 
-  return React.createElement('g', { ref })
+  return React.createElement(
+    'g',
+    { ref },
+    // Create the structure first so that react can add the children
+    children && dataset.map(
+      (data) => React.createElement(
+        tag,
+        { key: keyFn(data), 'data-key': keyFn(data) },
+        children && React.Children.toArray(children)
+          .map(child => React.cloneElement(child, { key: child.toString(), dataset: [data] }))
+      )
+    )
+  )
 }
